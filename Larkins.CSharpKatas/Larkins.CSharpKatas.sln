@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Larkins.CSharpKatas", "src\Larkins.CSharpKatas\Larkins.CSharpKatas.csproj", "{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Larkins.CSharpKatas.Tests.Unit", "tests\Larkins.CSharpKatas.Tests.Unit\Larkins.CSharpKatas.Tests.Unit.csproj", "{6C121207-44A9-478F-8B83-EBC1D82C4882}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C121207-44A9-478F-8B83-EBC1D82C4882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C121207-44A9-478F-8B83-EBC1D82C4882}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C121207-44A9-478F-8B83-EBC1D82C4882}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C121207-44A9-478F-8B83-EBC1D82C4882}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {506A7ECE-5D3D-4058-87CE-2125EC4E1AFF}
+	EndGlobalSection
+EndGlobal
