@@ -64,6 +64,11 @@ namespace Larkins.CSharpKatas
 
             static bool IsValid(string romanNumeral)
             {
+                if (string.IsNullOrEmpty(romanNumeral))
+                {
+                    return false;
+                }
+
                 var romanNumeralPattern = "^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$";
                 var regex = new Regex(romanNumeralPattern);
 
@@ -87,99 +92,61 @@ namespace Larkins.CSharpKatas
                 var digit = arabicNumeral / divider;
                 arabicNumeral %= divider;
 
-                if (divider == 1000 && digit > 0)
+                if (divider == 1000)
                 {
-                    for (var i = 0; i < digit; i++)
-                    {
-                        rm += "M";
-                    }
+                    rm += DigitCharacter(digit, "M", "", "");
                 }
                 else if (divider == 100)
                 {
-                    if (digit == 9)
-                    {
-                        rm += "CM";
-                    }
-                    else if (digit >= 5)
-                    {
-                        rm += "D";
-
-                        for (var i = 0; i < digit - 5; i++)
-                        {
-                            rm += "C";
-                        }
-                    }
-                    else if (digit == 4)
-                    {
-                        rm += "CD";
-                    }
-                    else
-                    {
-                        for (var i = 0; i < digit; i++)
-                        {
-                            rm += "C";
-                        }
-                    }
+                    rm += DigitCharacter(digit, "C", "D", "M");
                 }
                 else if (divider == 10)
                 {
-                    if (digit == 9)
-                    {
-                        rm += "XC";
-                    }
-                    else if (digit >= 5)
-                    {
-                        rm += "L";
-
-                        for (var i = 0; i < digit - 5; i++)
-                        {
-                            rm += "X";
-                        }
-                    }
-                    else if (digit == 4)
-                    {
-                        rm += "XL";
-                    }
-                    else
-                    {
-                        for (var i = 0; i < digit; i++)
-                        {
-                            rm += "X";
-                        }
-                    }
+                    rm += DigitCharacter(digit, "X", "L", "C");
                 }
                 else if (divider == 1)
                 {
-                    if (digit == 9)
-                    {
-                        rm += "IX";
-                    }
-                    else if (digit >= 5)
-                    {
-                        rm += "V";
-
-                        for (var i = 0; i < digit - 5; i++)
-                        {
-                            rm += "I";
-                        }
-                    }
-                    else if (digit == 4)
-                    {
-                        rm += "IV";
-                    }
-                    else
-                    {
-                        for (var i = 0; i < digit; i++)
-                        {
-                            rm += "I";
-                        }
-                    }
+                    rm += DigitCharacter(digit, "I", "V", "X");
                 }
 
                 divider /= 10;
             }
 
             return new RomanNumeral(arabicNumeral, rm);
+
+            static string DigitCharacter(int digit, string one, string five, string ten)
+            {
+                if (digit == 9)
+                {
+                    return one + ten;
+                }
+
+                if (digit >= 5)
+                {
+                    var rm = five;
+
+                    for (var i = 0; i < digit - 5; i++)
+                    {
+                        rm += one;
+                    }
+
+                    return rm;
+                }
+
+                if (digit == 4)
+                {
+                    return one + five;
+                }
+
+                var rm2 = "";
+
+                for (var i = 0; i < digit; i++)
+                {
+                    rm2 += one;
+                }
+
+                return rm2;
+            }
         }
 
         private class RomanNumeralCharacter
@@ -196,7 +163,7 @@ namespace Larkins.CSharpKatas
 
             public bool IsSubtractable => new List<int> { 1, 10, 100 }.Contains(Value);
 
-        public static Result<RomanNumeralCharacter> Create(char character)
+            public static Result<RomanNumeralCharacter> Create(char character)
             {
                 var valueResult = RomanNumeralValueLookUp(character);
 
