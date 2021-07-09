@@ -84,7 +84,6 @@ namespace Larkins.CSharpKatas
             }
 
             var rm = "";
-
             var divider = 1000;
 
             while (divider > 0)
@@ -92,45 +91,36 @@ namespace Larkins.CSharpKatas
                 var digit = arabicNumeral / divider;
                 arabicNumeral %= divider;
 
-                if (divider == 1000)
-                {
-                    rm += DigitCharacter(digit, "M", "", "");
-                }
-                else if (divider == 100)
-                {
-                    rm += DigitCharacter(digit, "C", "D", "M");
-                }
-                else if (divider == 10)
-                {
-                    rm += DigitCharacter(digit, "X", "L", "C");
-                }
-                else if (divider == 1)
-                {
-                    rm += DigitCharacter(digit, "I", "V", "X");
-                }
+                rm += DigitCharacter(digit, divider);
 
                 divider /= 10;
             }
 
             return new RomanNumeral(arabicNumeral, rm);
 
-            static string DigitCharacter(int digit, string one, string five, string ten)
+            static (string one, string five, string ten) LookUp(int place)
             {
+                return place switch
+                {
+                    1000 => ("M", "", ""),
+                    100 => ("C", "D", "M"),
+                    10 => ("X", "L", "C"),
+                    1 => ("I", "V", "X"),
+                    _ => ("", "", "")
+                };
+            }
+
+            static string DigitCharacter(int digit, int place)
+            {
+                var lookups = LookUp(place);
+
+                var one = lookups.one;
+                var five = lookups.five;
+                var ten = lookups.ten;
+
                 if (digit == 9)
                 {
                     return one + ten;
-                }
-
-                if (digit >= 5)
-                {
-                    var rm = five;
-
-                    for (var i = 0; i < digit - 5; i++)
-                    {
-                        rm += one;
-                    }
-
-                    return rm;
                 }
 
                 if (digit == 4)
@@ -138,14 +128,20 @@ namespace Larkins.CSharpKatas
                     return one + five;
                 }
 
-                var rm2 = "";
+                var rm = "";
+
+                if (digit >= 5)
+                {
+                    rm = five;
+                    digit -= 5;
+                }
 
                 for (var i = 0; i < digit; i++)
                 {
-                    rm2 += one;
+                    rm += one;
                 }
 
-                return rm2;
+                return rm;
             }
         }
 
