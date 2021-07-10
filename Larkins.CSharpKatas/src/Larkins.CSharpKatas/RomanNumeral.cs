@@ -98,51 +98,58 @@ namespace Larkins.CSharpKatas
 
             return new RomanNumeral(arabicNumeral, rm);
 
-            static (string one, string five, string ten) LookUp(int place)
-            {
-                return place switch
-                {
-                    1000 => ("M", "", ""),
-                    100 => ("C", "D", "M"),
-                    10 => ("X", "L", "C"),
-                    1 => ("I", "V", "X"),
-                    _ => ("", "", "")
-                };
-            }
-
             static string DigitCharacter(int digit, int place)
             {
-                var lookups = LookUp(place);
-
-                var one = lookups.one;
-                var five = lookups.five;
-                var ten = lookups.ten;
-
-                if (digit == 9)
+                if (digit is 9 or 4)
                 {
-                    return one + ten;
-                }
-
-                if (digit == 4)
-                {
-                    return one + five;
+                    return RomanNumeralFromValueLookUp(digit * place);
                 }
 
                 var rm = "";
 
                 if (digit >= 5)
                 {
-                    rm = five;
+                    rm = RomanNumeralFromValueLookUp(5 * place);
                     digit -= 5;
                 }
 
                 for (var i = 0; i < digit; i++)
                 {
-                    rm += one;
+                    rm += RomanNumeralFromValueLookUp(place);
                 }
 
                 return rm;
             }
+        }
+
+        private static int RomanNumeralValueLookUp(string romanNumeral)
+        {
+            return RomanNumeralValueLookUps().Find(x => x.romanNumeral == romanNumeral).value;
+        }
+
+        private static string RomanNumeralFromValueLookUp(int value)
+        {
+            return RomanNumeralValueLookUps().Find(x => x.value == value).romanNumeral;
+        }
+
+        private static List<(string romanNumeral, int value)> RomanNumeralValueLookUps()
+        {
+            return new()
+            {
+                ("I", 1),
+                ("IV", 4),
+                ("V", 5),
+                ("IX", 9),
+                ("X", 10),
+                ("XL", 40),
+                ("L", 50),
+                ("XC", 90),
+                ("C", 100),
+                ("CD", 400),
+                ("D", 500),
+                ("CM", 900),
+                ("M", 1000)
+            };
         }
 
         private class RomanNumeralCharacter
