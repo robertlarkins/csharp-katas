@@ -83,72 +83,38 @@ namespace Larkins.CSharpKatas
                 return Result.Failure<RomanNumeral>($"Arabic numeral {arabicNumeral} must be between 1 and 3999.");
             }
 
-            var rm = "";
-            var divider = 1000;
+            var lookups = RomanNumeralValueLookUps();
+            var convertedRomanNumeral = "";
 
-            while (divider > 0)
+            foreach (var (romanNumeral, value) in lookups)
             {
-                var digit = arabicNumeral / divider;
-                arabicNumeral %= divider;
-
-                rm += DigitCharacter(digit, divider);
-
-                divider /= 10;
+                while (arabicNumeral >= value)
+                {
+                    convertedRomanNumeral += romanNumeral;
+                    arabicNumeral -= value;
+                }
             }
 
-            return new RomanNumeral(arabicNumeral, rm);
+            return new RomanNumeral(arabicNumeral, convertedRomanNumeral);
+        }
 
-            static string DigitCharacter(int digit, int place)
+        private static IEnumerable<(string RomanNumeral, int Value)> RomanNumeralValueLookUps()
+        {
+            return new List<(string RomanNumeral, int Value)>
             {
-                if (digit is 9 or 4)
-                {
-                    return RomanNumeralFromValueLookUp(digit * place);
-                }
-
-                var rm = "";
-
-                if (digit >= 5)
-                {
-                    rm = RomanNumeralFromValueLookUp(5 * place);
-                    digit -= 5;
-                }
-
-                for (var i = 0; i < digit; i++)
-                {
-                    rm += RomanNumeralFromValueLookUp(place);
-                }
-
-                return rm;
-            }
-        }
-
-        private static int RomanNumeralValueLookUp(string romanNumeral)
-        {
-            return RomanNumeralValueLookUps().Find(x => x.romanNumeral == romanNumeral).value;
-        }
-
-        private static string RomanNumeralFromValueLookUp(int value)
-        {
-            return RomanNumeralValueLookUps().Find(x => x.value == value).romanNumeral;
-        }
-
-        private static List<(string romanNumeral, int value)> RomanNumeralValueLookUps()
-        {
-            return new()
-            {
-                ("I", 1),
-                ("IV", 4),
-                ("V", 5),
-                ("IX", 9),
-                ("X", 10),
-                ("XL", 40),
-                ("L", 50),
-                ("XC", 90),
-                ("C", 100),
-                ("CD", 400),
-                ("D", 500),
+                ("M", 1000),
                 ("CM", 900),
-                ("M", 1000)
+                ("D", 500),
+                ("CD", 400),
+                ("C", 100),
+                ("XC", 90),
+                ("L", 50),
+                ("XL", 40),
+                ("X", 10),
+                ("IX", 9),
+                ("V", 5),
+                ("IV", 4),
+                ("I", 1)
             };
         }
 
