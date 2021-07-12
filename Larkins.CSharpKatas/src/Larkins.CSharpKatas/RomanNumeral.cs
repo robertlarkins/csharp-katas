@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Larkins.CSharpKatas
@@ -23,40 +24,29 @@ namespace Larkins.CSharpKatas
                 return Result.Failure<RomanNumeral>($"'{romanNumeral}' is an invalid Roman Numeral");
             }
 
+            var lookups = RomanNumeralValueLookUps();
+
             var intValue = 0;
 
             for (var i = 0; i < romanNumeral.Length; i++)
             {
-                var currentCharacterResult = RomanNumeralCharacter.Create(romanNumeral[i]);
+                var currentValue = lookups.ToList().Find(x => x.RomanNumeral == romanNumeral[i].ToString()).Value;
+                var nextCharacterValue = 0;
 
-                if (currentCharacterResult.IsFailure)
-                {
-                    return Result.Failure<RomanNumeral>(currentCharacterResult.Error);
-                }
-
-                var currentValue = currentCharacterResult.Value;
-                RomanNumeralCharacter nextCharacter = null;
                 if (i < romanNumeral.Length - 1)
                 {
-                    var nextCharacterResult = RomanNumeralCharacter.Create(romanNumeral[i + 1]);
-
-                    if (nextCharacterResult.IsFailure)
-                    {
-                        return Result.Failure<RomanNumeral>(nextCharacterResult.Error);
-                    }
-
-                    nextCharacter = nextCharacterResult.Value;
+                    nextCharacterValue = lookups.ToList().Find(x => x.RomanNumeral == romanNumeral[i + 1].ToString()).Value;
                 }
 
-                if (currentValue.IsSubtractable && currentValue.Value < nextCharacter?.Value)
+                if (new List<int> {1, 10, 100}.Contains(currentValue) && currentValue < nextCharacterValue)
                 {
-                    intValue -= currentValue.Value;
-                    intValue += nextCharacter.Value;
+                    intValue -= currentValue;
+                    intValue += nextCharacterValue;
                     i++;
                 }
                 else
                 {
-                    intValue += currentValue.Value;
+                    intValue += currentValue;
                 }
             }
 
@@ -116,75 +106,6 @@ namespace Larkins.CSharpKatas
                 ("IV", 4),
                 ("I", 1)
             };
-        }
-
-        private class RomanNumeralCharacter
-        {
-            private RomanNumeralCharacter(char character, int value)
-            {
-                Character = character;
-                Value = value;
-            }
-
-            public char Character { get; }
-
-            public int Value { get; }
-
-            public bool IsSubtractable => new List<int> { 1, 10, 100 }.Contains(Value);
-
-            public static Result<RomanNumeralCharacter> Create(char character)
-            {
-                var valueResult = RomanNumeralValueLookUp(character);
-
-                if (valueResult.IsFailure)
-                {
-                    return Result.Failure<RomanNumeralCharacter>(valueResult.Error);
-                }
-
-                return new RomanNumeralCharacter(character, valueResult.Value);
-            }
-
-            public static Result<RomanNumeralCharacter> Create(int value)
-            {
-                var charResult = RomanNumeralCharacterLookUp(value);
-
-                if (charResult.IsFailure)
-                {
-                    return Result.Failure<RomanNumeralCharacter>(charResult.Error);
-                }
-
-                return new RomanNumeralCharacter(charResult.Value, value);
-            }
-
-            private static Result<int> RomanNumeralValueLookUp(char character)
-            {
-                return character switch
-                {
-                    'I' => 1,
-                    'V' => 5,
-                    'X' => 10,
-                    'L' => 50,
-                    'C' => 100,
-                    'D' => 500,
-                    'M' => 1000,
-                    _ => Result.Failure<int>("Unrecognised character.")
-                };
-            }
-
-            private static Result<char> RomanNumeralCharacterLookUp(int value)
-            {
-                return value switch
-                {
-                    1 => 'I',
-                    5 => 'V',
-                    10 => 'X',
-                    50 => 'L',
-                    100 => 'C',
-                    500 => 'D',
-                    1000 => 'M',
-                    _ => Result.Failure<char>("No character associated with this value.")
-                };
-            }
         }
     }
 }
