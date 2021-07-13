@@ -31,16 +31,14 @@ namespace Larkins.CSharpKatas
             static int ConvertToIntValue(string romanNumeral)
             {
                 var valueLookup = RomanNumeralFromValueDictionary();
-                var intValue = 0;
+                var intValue = valueLookup[romanNumeral.Last().ToString()];
 
-                for (var i = 0; i < romanNumeral.Length; i++)
+                for (var i = romanNumeral.Length - 2; i >= 0; i--)
                 {
                     var currentCharacterValue = valueLookup[romanNumeral[i].ToString()];
-                    var nextCharacterValue = i < romanNumeral.Length - 1 ?
-                        valueLookup[romanNumeral[i + 1].ToString()] :
-                        0;
+                    var previousCharacterValue = valueLookup[romanNumeral[i + 1].ToString()];
 
-                    if (currentCharacterValue < nextCharacterValue)
+                    if (currentCharacterValue < previousCharacterValue)
                     {
                         intValue -= currentCharacterValue;
                     }
