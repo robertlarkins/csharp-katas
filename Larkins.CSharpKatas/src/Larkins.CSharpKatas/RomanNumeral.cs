@@ -36,8 +36,9 @@ namespace Larkins.CSharpKatas
                 for (var i = 0; i < romanNumeral.Length; i++)
                 {
                     var currentCharacterValue = valueLookup[romanNumeral[i].ToString()];
-                    var nextCharacterValue =
-                        i < romanNumeral.Length - 1 ? valueLookup[romanNumeral[i + 1].ToString()] : 0;
+                    var nextCharacterValue = i < romanNumeral.Length - 1 ?
+                        valueLookup[romanNumeral[i + 1].ToString()] :
+                        0;
 
                     if (currentCharacterValue < nextCharacterValue)
                     {
