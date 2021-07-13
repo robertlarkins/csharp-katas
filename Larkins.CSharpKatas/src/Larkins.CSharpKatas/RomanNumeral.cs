@@ -21,36 +21,36 @@ namespace Larkins.CSharpKatas
         {
             if (!IsValid(romanNumeral))
             {
-                return Result.Failure<RomanNumeral>($"'{romanNumeral}' is an invalid Roman Numeral");
+                return Result.Failure<RomanNumeral>($"'{romanNumeral}' is an invalid Roman Numeral.");
             }
 
-            var lookups = RomanNumeralValueLookUps();
-
-            var intValue = 0;
-
-            for (var i = 0; i < romanNumeral.Length; i++)
-            {
-                var currentValue = lookups.ToList().Find(x => x.RomanNumeral == romanNumeral[i].ToString()).Value;
-                var nextCharacterValue = 0;
-
-                if (i < romanNumeral.Length - 1)
-                {
-                    nextCharacterValue = lookups.ToList().Find(x => x.RomanNumeral == romanNumeral[i + 1].ToString()).Value;
-                }
-
-                if (new List<int> {1, 10, 100}.Contains(currentValue) && currentValue < nextCharacterValue)
-                {
-                    intValue -= currentValue;
-                    intValue += nextCharacterValue;
-                    i++;
-                }
-                else
-                {
-                    intValue += currentValue;
-                }
-            }
+            var intValue = ConvertToIntValue(romanNumeral);
 
             return new RomanNumeral(intValue, romanNumeral);
+
+            static int ConvertToIntValue(string romanNumeral)
+            {
+                var valueLookup = RomanNumeralFromValueDictionary();
+                var intValue = 0;
+
+                for (var i = 0; i < romanNumeral.Length; i++)
+                {
+                    var currentCharacterValue = valueLookup[romanNumeral[i].ToString()];
+                    var nextCharacterValue =
+                        i < romanNumeral.Length - 1 ? valueLookup[romanNumeral[i + 1].ToString()] : 0;
+
+                    if (currentCharacterValue < nextCharacterValue)
+                    {
+                        intValue -= currentCharacterValue;
+                    }
+                    else
+                    {
+                        intValue += currentCharacterValue;
+                    }
+                }
+
+                return intValue;
+            }
 
             static bool IsValid(string romanNumeral)
             {
@@ -106,6 +106,13 @@ namespace Larkins.CSharpKatas
                 ("IV", 4),
                 ("I", 1)
             };
+        }
+
+        private static Dictionary<string, int> RomanNumeralFromValueDictionary()
+        {
+            var lookups = RomanNumeralValueLookUps();
+
+            return lookups.ToDictionary(x => x.RomanNumeral, x => x.Value);
         }
     }
 }
