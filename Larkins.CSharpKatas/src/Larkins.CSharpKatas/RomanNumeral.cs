@@ -1,22 +1,41 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
 
 namespace Larkins.CSharpKatas
 {
+    /// <summary>
+    /// Roman Numeral.
+    /// </summary>
     public class RomanNumeral
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RomanNumeral"/> class.
+        /// </summary>
+        /// <param name="arabicNumeral">The arabic numeral.</param>
+        /// <param name="romanNumeral">The roman numeral.</param>
         public RomanNumeral(int arabicNumeral, string romanNumeral)
         {
             IntValue = arabicNumeral;
             Value = romanNumeral;
         }
 
+        /// <summary>
+        /// Gets the int value.
+        /// </summary>
         public int IntValue { get; }
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
         public string Value { get; }
 
+        /// <summary>
+        /// Creates a roman numeral from the given string.
+        /// </summary>
+        /// <param name="romanNumeral">The roman numeral.</param>
+        /// <returns>The roman numeral result.</returns>
         public static Result<RomanNumeral> Create(string romanNumeral)
         {
             if (!IsValid(romanNumeral))
@@ -65,6 +84,11 @@ namespace Larkins.CSharpKatas
             }
         }
 
+        /// <summary>
+        /// Creates a roman numeral from the given arabic numeral.
+        /// </summary>
+        /// <param name="arabicNumeral">The arabic numeral.</param>
+        /// <returns>The roman numeral result.</returns>
         public static Result<RomanNumeral> Create(int arabicNumeral)
         {
             if (arabicNumeral is <= 0 or >= 4000)
@@ -73,7 +97,7 @@ namespace Larkins.CSharpKatas
             }
 
             var lookups = RomanNumeralValueLookUps();
-            var convertedRomanNumeral = "";
+            var convertedRomanNumeral = string.Empty;
 
             foreach (var (romanNumeral, value) in lookups)
             {

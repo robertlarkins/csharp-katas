@@ -3,8 +3,16 @@ using Xunit;
 
 namespace Larkins.CSharpKatas.Tests.Unit
 {
+    /// <summary>
+    /// Tests for Roman Numeral.
+    /// </summary>
     public class RomanNumeralTests
     {
+        /// <summary>
+        /// Romans the numeral converts to associated number.
+        /// </summary>
+        /// <param name="romanNumeral">The roman numeral.</param>
+        /// <param name="expected">The expected.</param>
         [Theory]
         [InlineData("I", 1)]
         [InlineData("II", 2)]
@@ -46,6 +54,10 @@ namespace Larkins.CSharpKatas.Tests.Unit
             result.Should().Be(expected);
         }
 
+        /// <summary>
+        /// Unknowns the roman numeral is invalid.
+        /// </summary>
+        /// <param name="romanNumeral">The roman numeral.</param>
         [Theory]
         [InlineData("")]
         [InlineData("ABCD")]
@@ -65,6 +77,10 @@ namespace Larkins.CSharpKatas.Tests.Unit
             result.IsFailure.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Numbers the outside roman numeral range is invalid.
+        /// </summary>
+        /// <param name="number">The number.</param>
         [Theory]
         [InlineData(-10)]
         [InlineData(0)]
@@ -77,6 +93,11 @@ namespace Larkins.CSharpKatas.Tests.Unit
             result.IsFailure.Should().BeTrue();
         }
 
+        /// <summary>
+        /// Numbers the converts to roman numeral.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="expected">The expected.</param>
         [Theory]
         [InlineData(1, "I")]
         [InlineData(2, "II")]
