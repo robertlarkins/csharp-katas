@@ -11,10 +11,11 @@ namespace Larkins.CSharpKatas.Tests.Unit
     public class PermutationsTests
     {
         /// <summary>
-        /// Ares all permutations generated.
+        /// Are all permutations generated.
         /// </summary>
         /// <remarks>
         /// How to get this to pass? https://dotnetfiddle.net/axwQxt.
+        /// Note: the order of expected is not necessarily the order of the results.
         /// </remarks>
         [Fact]
         public void Are_all_permutations_generated()
@@ -38,6 +39,21 @@ namespace Larkins.CSharpKatas.Tests.Unit
             // Assert
             result.Should().BeEquivalentTo(expected, options => options
                 .WithStrictOrderingFor(info => info.RuntimeType == typeof(int[])));
+        }
+
+        [Fact]
+        public void Are_all_permutations_generated_when_all_elements_are_the_same()
+        {
+            // Arrange
+            var sut = new PermutationIterator<int>(new[] { 5, 5, 5 }, true);
+
+            // Act
+            var result = sut.ToList();
+
+            // Assert
+            result.Should()
+                .HaveCount(6).And
+                .AllBeEquivalentTo(new[] { 5, 5, 5 });
         }
     }
 }

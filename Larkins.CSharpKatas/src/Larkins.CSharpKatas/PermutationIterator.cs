@@ -7,15 +7,19 @@ using System.Linq;
 namespace Larkins.CSharpKatas
 {
     /// <summary>
-    /// Perm. Written based on https://en.wikipedia.org/wiki/Heap%27s_algorithm.
+    /// Permutation iterator. This generates every permutation of the given array.
+    /// As it is an iterator the next permutation is only determined at call time.
+    /// This reduces the memory cost especially with large arrays.
     /// </summary>
+    /// <remarks>
+    /// Written based on https://en.wikipedia.org/wiki/Heap%27s_algorithm.
+    /// </remarks>
     /// <typeparam name="T">The type held in the array.</typeparam>
     public class PermutationIterator<T> : IEnumerable<ReadOnlyCollection<T>>
     {
         private readonly bool isNewArrayGenerated;
         private readonly T[] currentArray;
-        private readonly int n;
-        private readonly int[] c;
+        private readonly int[] stackState;
         private int i = 1;
 
         /// <summary>
@@ -26,8 +30,7 @@ namespace Larkins.CSharpKatas
         public PermutationIterator(IEnumerable<T> array, bool isNewArrayGenerated)
         {
             currentArray = (T[])array.ToArray().Clone();
-            n = currentArray.Length;
-            c = new int[n];
+            stackState = new int[currentArray.Length];
 
             this.isNewArrayGenerated = isNewArrayGenerated;
         }
@@ -45,23 +48,23 @@ namespace Larkins.CSharpKatas
         {
             yield return GetPermutation();
 
-            while (i < n)
+            while (i < currentArray.Length)
             {
-                if (c[i] < i)
+                if (stackState[i] < i)
                 {
                     var isEven = i % 2 == 0;
-                    var j = isEven ? 0 : c[i];
+                    var j = isEven ? 0 : stackState[i];
 
                     Swap(i, j);
 
                     yield return GetPermutation();
 
-                    c[i]++;
+                    stackState[i]++;
                     i = 1;
                 }
                 else
                 {
-                    c[i] = 0;
+                    stackState[i] = 0;
                     i++;
                 }
             }
@@ -78,16 +81,11 @@ namespace Larkins.CSharpKatas
         /// The default enumerator.
         /// </summary>
         /// <returns>Blah.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private void Swap(int index1, int index2)
         {
-            var temp = currentArray[index1];
-            currentArray[index1] = currentArray[index2];
-            currentArray[index2] = temp;
+            (currentArray[index1], currentArray[index2]) = (currentArray[index2], currentArray[index1]);
         }
     }
 }
