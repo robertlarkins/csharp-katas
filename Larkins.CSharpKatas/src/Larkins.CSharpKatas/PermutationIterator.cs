@@ -26,7 +26,10 @@ namespace Larkins.CSharpKatas
         /// Initializes a new instance of the <see cref="PermutationIterator{T}"/> class.
         /// </summary>
         /// <param name="array">The array to permutate.</param>
-        /// <param name="isNewArrayGenerated">if set to <c>true</c> generate new array on each iteration.</param>
+        /// <param name="isNewArrayGenerated">
+        /// If set to <c>true</c> generate new array on each iteration.
+        /// This allows the returned array to be modified without changing the internally stored array.
+        /// </param>
         public PermutationIterator(IEnumerable<T> array, bool isNewArrayGenerated)
         {
             currentArray = (T[])array.ToArray().Clone();
@@ -80,7 +83,7 @@ namespace Larkins.CSharpKatas
         /// <summary>
         /// The default enumerator.
         /// </summary>
-        /// <returns>Blah.</returns>
+        /// <returns>The enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         private void Swap(int index1, int index2)
