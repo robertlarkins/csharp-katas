@@ -14,6 +14,7 @@ namespace Larkins.CSharpKatas.Tests.Unit
         [InlineData(3, 3, "Deuce")]
         [InlineData(4, 3, "Advantage Player 1")]
         [InlineData(3, 4, "Advantage Player 2")]
+        [InlineData(4, 0, "Player 1 Wins")]
         [InlineData(5, 3, "Player 1 Wins")]
         [InlineData(6, 8, "Player 2 Wins")]
         public void Tennis_game_score_for_different_point_combinations(

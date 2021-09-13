@@ -51,8 +51,9 @@ namespace Larkins.CSharpKatas
             }
 
             var playerInTheLead = WhichPlayerIsInTheLead();
+            var isAPlayerAheadByOnePoint = Math.Abs(PlayerOneScore - PlayerTwoScore) == 1;
 
-            if (Math.Abs(PlayerOneScore - PlayerTwoScore) == 1)
+            if (isAPlayerAheadByOnePoint)
             {
                 return $"Advantage {playerInTheLead}";
             }
