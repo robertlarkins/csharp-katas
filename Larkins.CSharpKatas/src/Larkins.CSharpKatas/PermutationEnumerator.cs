@@ -34,7 +34,8 @@ namespace Larkins.CSharpKatas
             this.isNewArrayGenerated = isNewArrayGenerated;
             originalArray = (T[])array.ToArray().Clone();
             currentArray = (T[])originalArray.Clone();
-            arrayLength = currentArray.Length;
+
+            arrayLength = originalArray.Length;
 
             stackState = new int[arrayLength];
         }
