@@ -23,11 +23,7 @@ namespace Larkins.CSharpKatas.Tests.Unit
             string expected)
         {
             // Arrange
-            var sut = new TennisGame
-            {
-                PlayerOneScore = playerOneScore,
-                PlayerTwoScore = playerTwoScore
-            };
+            var sut = new TennisGame(playerOneScore, playerTwoScore);
 
             // Act
             var result = sut.GetScore();

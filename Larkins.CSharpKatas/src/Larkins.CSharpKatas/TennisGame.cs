@@ -5,7 +5,9 @@ namespace Larkins.CSharpKatas
 {
     /// <summary>
     /// Wraps a Tennis Game.
-    /// It is based on this Kata: https://josepaumard.github.io/katas/intermediate/tennis-kata.html.
+    /// It is based on this Kata:
+    /// https://josepaumard.github.io/katas/intermediate/tennis-kata.html.
+    /// https://codingdojo.org/kata/Tennis/.
     /// </summary>
     public class TennisGame
     {
@@ -18,14 +20,45 @@ namespace Larkins.CSharpKatas
         };
 
         /// <summary>
-        /// Gets or sets player one's score.
+        /// Initializes a new instance of the <see cref="TennisGame"/> class.
         /// </summary>
-        public int PlayerOneScore { get; set; }
+        /// <param name="playerOneStartScore">The player one start score.</param>
+        /// <param name="playerTwoStartScore">The player two start score.</param>
+        public TennisGame(int playerOneStartScore = 0, int playerTwoStartScore = 0)
+        {
+            PlayerOneScore = playerOneStartScore;
+            PlayerTwoScore = playerTwoStartScore;
+        }
 
         /// <summary>
-        /// Gets or sets the player two's score.
+        /// Gets player one's score.
         /// </summary>
-        public int PlayerTwoScore { get; set; }
+        public int PlayerOneScore { get; private set; }
+
+        /// <summary>
+        /// Gets the player two's score.
+        /// </summary>
+        public int PlayerTwoScore { get; private set; }
+
+        /// <summary>
+        /// Gets the score difference between the two players.
+        /// </summary>
+        public int ScoreDifference => Math.Abs(PlayerOneScore - PlayerTwoScore);
+
+        /// <summary>
+        /// Gets a value indicating whether the game tied.
+        /// </summary>
+        public bool IsGameTied => ScoreDifference == 0;
+
+        /// <summary>
+        /// Increases the player ones score.
+        /// </summary>
+        public void IncreasePlayerOnesScore() => PlayerOneScore++;
+
+        /// <summary>
+        /// Increases the player twos score.
+        /// </summary>
+        public void IncreasePlayerTwosScore() => PlayerTwoScore++;
 
         /// <summary>
         /// Gets the current score of the Tennis game.
@@ -33,14 +66,7 @@ namespace Larkins.CSharpKatas
         /// <returns>The score.</returns>
         public string GetScore()
         {
-            var isEqualScores = PlayerOneScore == PlayerTwoScore;
-
-            if (PlayerOneScore <= 3 && PlayerTwoScore <= 3 && !isEqualScores)
-            {
-                return $"{scoreLookup[PlayerOneScore]}-{scoreLookup[PlayerTwoScore]}";
-            }
-
-            if (isEqualScores)
+            if (IsGameTied)
             {
                 if (PlayerOneScore < 3)
                 {
@@ -50,17 +76,19 @@ namespace Larkins.CSharpKatas
                 return "Deuce";
             }
 
-            var playerInTheLead = WhichPlayerIsInTheLead();
-            var isAPlayerAheadByOnePoint = Math.Abs(PlayerOneScore - PlayerTwoScore) == 1;
-
-            if (isAPlayerAheadByOnePoint)
+            if (PlayerOneScore <= 3 && PlayerTwoScore <= 3)
             {
-                return $"Advantage {playerInTheLead}";
+                return $"{scoreLookup[PlayerOneScore]}-{scoreLookup[PlayerTwoScore]}";
             }
 
-            return $"{playerInTheLead} Wins";
-        }
+            var leadPlayer = PlayerOneScore > PlayerTwoScore ? "Player 1" : "Player 2";
 
-        private string WhichPlayerIsInTheLead() => PlayerOneScore > PlayerTwoScore ? "Player 1" : "Player 2";
+            if (ScoreDifference == 1)
+            {
+                return $"Advantage {leadPlayer}";
+            }
+
+            return $"{leadPlayer} Wins";
+        }
     }
 }
