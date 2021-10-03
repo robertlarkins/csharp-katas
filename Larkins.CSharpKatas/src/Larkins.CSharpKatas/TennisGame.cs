@@ -68,12 +68,7 @@ namespace Larkins.CSharpKatas
         {
             if (IsGameTied)
             {
-                if (PlayerOneScore < 3)
-                {
-                    return $"{scoreLookup[PlayerOneScore]}-All";
-                }
-
-                return "Deuce";
+                return CalculateTiedScore();
             }
 
             if (PlayerOneScore <= 3 && PlayerTwoScore <= 3)
@@ -81,6 +76,21 @@ namespace Larkins.CSharpKatas
                 return $"{scoreLookup[PlayerOneScore]}-{scoreLookup[PlayerTwoScore]}";
             }
 
+            return CalculateScoreGreaterThanThreePoints();
+        }
+
+        private string CalculateTiedScore()
+        {
+            if (PlayerOneScore < 3)
+            {
+                return $"{scoreLookup[PlayerOneScore]}-All";
+            }
+
+            return "Deuce";
+        }
+
+        private string CalculateScoreGreaterThanThreePoints()
+        {
             var leadPlayer = PlayerOneScore > PlayerTwoScore ? "Player 1" : "Player 2";
 
             if (ScoreDifference == 1)
