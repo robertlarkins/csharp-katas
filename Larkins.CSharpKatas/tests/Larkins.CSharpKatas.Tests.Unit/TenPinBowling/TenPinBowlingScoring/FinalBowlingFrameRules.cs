@@ -1,6 +1,7 @@
 using Larkins.CSharpKatas.TenPinBowling;
+using Larkins.CSharpKatas.TenPinBowling.ValueObjects;
 
-namespace Larkins.CSharpKatas.Tests.Unit.TenPinBowlingScoring;
+namespace Larkins.CSharpKatas.Tests.Unit.TenPinBowling.TenPinBowlingScoring;
 
 public class FinalBowlingFrameRules
 {
@@ -14,10 +15,10 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
-        var action = () => sut.AddRoll(rollThreePinsKnockedDown);
+        var action = () => sut.AddRoll(Roll.Create(rollThreePinsKnockedDown).Value);
 
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("No more rolls can be added.");
@@ -28,11 +29,11 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(10);
-        sut.AddRoll(1);
-        sut.AddRoll(2);
+        sut.AddRoll(Roll.Create(10).Value);
+        sut.AddRoll(Roll.Create(1).Value);
+        sut.AddRoll(Roll.Create(2).Value);
 
-        var action = () => sut.AddRoll(3);
+        var action = () => sut.AddRoll(Roll.Create(3).Value);
 
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("No more rolls can be added.");
@@ -47,9 +48,9 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(10);
-        sut.AddRoll(rollTwoPinsKnockedDown);
-        sut.AddRoll(rollThreePinsKnockedDown);
+        sut.AddRoll(Roll.Create(10).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollThreePinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeTrue();
     }
@@ -66,9 +67,9 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
-        sut.AddRoll(rollThreePinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollThreePinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeTrue();
     }
@@ -84,8 +85,8 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeTrue();
     }
@@ -103,9 +104,9 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
-        sut.AddRoll(rollThreePinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollThreePinsKnockedDown).Value);
 
         sut.TotalPinsKnockedDown.Should().Be(expected);
     }
@@ -122,9 +123,9 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
-        sut.AddRoll(rollThreePinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollThreePinsKnockedDown).Value);
 
         sut.TotalPinsKnockedDown.Should().Be(expected);
     }
@@ -140,8 +141,8 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.TotalPinsKnockedDown.Should().Be(expected);
     }
@@ -154,7 +155,7 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeFalse();
     }
@@ -170,25 +171,9 @@ public class FinalBowlingFrameRules
     {
         var sut = new FinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeFalse();
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(11)]
-    [InlineData(int.MinValue)]
-    [InlineData(int.MaxValue)]
-    public void An_added_roll_cannot_be_outside_range_of_0_to_ten_pins_knocked_down(int pinsKnockedDown)
-    {
-        var sut = new FinalBowlingFrame();
-
-        var action = () => sut.AddRoll(pinsKnockedDown);
-
-        action.Should().Throw<ArgumentOutOfRangeException>()
-            .WithParameterName("pinsKnockedDown")
-            .WithMessage("The number of pins knocked down must be between 0 and 10 (inclusive). (Parameter 'pinsKnockedDown')");
     }
 }

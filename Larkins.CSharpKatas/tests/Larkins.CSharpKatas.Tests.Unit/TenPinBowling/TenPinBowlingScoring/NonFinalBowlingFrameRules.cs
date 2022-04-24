@@ -1,6 +1,7 @@
 ﻿using Larkins.CSharpKatas.TenPinBowling;
+using Larkins.CSharpKatas.TenPinBowling.ValueObjects;
 
-namespace Larkins.CSharpKatas.Tests.Unit.TenPinBowlingScoring;
+namespace Larkins.CSharpKatas.Tests.Unit.TenPinBowling.TenPinBowlingScoring;
 
 public class NonFinalBowlingFrameRules
 {
@@ -15,8 +16,8 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.TotalPinsKnockedDown.Should().Be(expected);
     }
@@ -26,7 +27,7 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(10);
+        sut.AddRoll(Roll.Create(10).Value);
 
         sut.TotalPinsKnockedDown.Should().Be(10);
     }
@@ -35,7 +36,7 @@ public class NonFinalBowlingFrameRules
     public void Frame_is_complete_if_the_first_roll_is_a_strike()
     {
         var sut = new NonFinalBowlingFrame();
-        sut.AddRoll(10);
+        sut.AddRoll(Roll.Create(10).Value);
 
         sut.IsComplete.Should().BeTrue();
     }
@@ -50,8 +51,8 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.IsComplete.Should().BeTrue();
     }
@@ -61,7 +62,7 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(10);
+        sut.AddRoll(Roll.Create(10).Value);
 
         sut.IsStrike.Should().BeTrue();
         sut.IsSpare.Should().BeFalse();
@@ -79,8 +80,8 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.IsSpare.Should().BeTrue();
         sut.IsStrike.Should().BeFalse();
@@ -98,28 +99,12 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
-        sut.AddRoll(rollTwoPinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
+        sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         sut.IsOpenFrame.Should().BeTrue();
         sut.IsSpare.Should().BeFalse();
         sut.IsStrike.Should().BeFalse();
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(11)]
-    [InlineData(int.MinValue)]
-    [InlineData(int.MaxValue)]
-    public void An_added_roll_cannot_be_outside_range_of_0_to_ten_pins_knocked_down(int pinsKnockedDown)
-    {
-        var sut = new NonFinalBowlingFrame();
-
-        var action = () => sut.AddRoll(pinsKnockedDown);
-
-        action.Should().Throw<ArgumentOutOfRangeException>()
-            .WithParameterName("pinsKnockedDown")
-            .WithMessage("The number of pins knocked down must be between 0 and 10 (inclusive). (Parameter 'pinsKnockedDown')");
     }
 
     [Theory]
@@ -131,13 +116,13 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(rollOnePinsKnockedDown);
+        sut.AddRoll(Roll.Create(rollOnePinsKnockedDown).Value);
 
-        var action = () => sut.AddRoll(rollTwoPinsKnockedDown);
+        var action = () => sut.AddRoll(Roll.Create(rollTwoPinsKnockedDown).Value);
 
         action.Should().Throw<ArgumentOutOfRangeException>()
-            .WithParameterName("pinsKnockedDown")
-            .WithMessage("The second roll cannot make total pins knocked down be greater than ten. (Parameter 'pinsKnockedDown')");
+            .WithParameterName("roll")
+            .WithMessage("The second roll cannot make total pins knocked down be greater than ten. (Parameter 'roll')");
     }
 
     [Fact]
@@ -145,9 +130,9 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(10);
+        sut.AddRoll(Roll.Create(10).Value);
 
-        var action = () => sut.AddRoll(10);
+        var action = () => sut.AddRoll(Roll.Create(10).Value);
 
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("No more rolls can be added.");
@@ -158,10 +143,10 @@ public class NonFinalBowlingFrameRules
     {
         var sut = new NonFinalBowlingFrame();
 
-        sut.AddRoll(4);
-        sut.AddRoll(2);
+        sut.AddRoll(Roll.Create(4).Value);
+        sut.AddRoll(Roll.Create(2).Value);
 
-        var action = () => sut.AddRoll(2);
+        var action = () => sut.AddRoll(Roll.Create(2).Value);
 
         action.Should().Throw<InvalidOperationException>()
             .WithMessage("No more rolls can be added.");

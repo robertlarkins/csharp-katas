@@ -1,3 +1,5 @@
+using Larkins.CSharpKatas.TenPinBowling.ValueObjects;
+
 namespace Larkins.CSharpKatas.TenPinBowling;
 
 /// <summary>
@@ -18,8 +20,8 @@ public interface IBowlingFrame
     /// <summary>
     /// Add the number of pins knocked down in the roll to the frame.
     /// </summary>
-    /// <param name="pinsKnockedDown">The number of pins knocked down in a roll.</param>
+    /// <param name="roll">The number of pins knocked down in a roll.</param>
     /// <exception cref="InvalidOperationException">If trying to add another roll and no more can be added.</exception>
     /// <exception cref="ArgumentOutOfRangeException">If the number of pins to knock down is outside the 0 to 10 range.</exception>
-    public void AddRoll(int pinsKnockedDown);
+    public void AddRoll(Roll roll);
 }

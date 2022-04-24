@@ -1,19 +1,19 @@
-﻿namespace Larkins.CSharpKatas.TenPinBowling;
+﻿using Larkins.CSharpKatas.TenPinBowling.ValueObjects;
+
+namespace Larkins.CSharpKatas.TenPinBowling;
 
 /// <summary>
 /// A bowling frame consisting of two rolls.
 /// </summary>
 public class NonFinalBowlingFrame : IBowlingFrame
 {
-    private readonly int[] pinsKnockedDownPerRoll = new int[2];
-
-    private int rollsAdded = 0;
+    private readonly List<Roll> rolls = new();
 
     /// <inheritdoc />
-    public int TotalPinsKnockedDown => pinsKnockedDownPerRoll.Sum();
+    public int TotalPinsKnockedDown => rolls.Sum(roll => roll.PinsKnockedDown);
 
     /// <inheritdoc />
-    public bool IsComplete => rollsAdded == 2 || IsStrike;
+    public bool IsComplete => rolls.Count == 2 || IsStrike;
 
     /// <summary>
     /// Gets a value indicating whether this is an open frame.
@@ -24,34 +24,27 @@ public class NonFinalBowlingFrame : IBowlingFrame
     /// <summary>
     /// Gets a value indicating whether this frame is a spare.
     /// </summary>
-    public bool IsSpare => TotalPinsKnockedDown == 10 && rollsAdded == 2;
+    public bool IsSpare => TotalPinsKnockedDown == 10 && rolls.Count == 2;
 
     /// <summary>
     /// Gets a value indicating whether this frame is a strike.
     /// </summary>
-    public bool IsStrike => pinsKnockedDownPerRoll[0] == 10;
+    public bool IsStrike => rolls.Count == 1 && rolls[0].PinsKnockedDown == 10;
 
     /// <inheritdoc />
-    public void AddRoll(int pinsKnockedDown)
+    public void AddRoll(Roll roll)
     {
         if (IsComplete)
         {
             throw new InvalidOperationException("No more rolls can be added.");
         }
 
-        if (rollsAdded == 1 && pinsKnockedDownPerRoll[0] + pinsKnockedDown > 10)
+        if (rolls.Count == 1 && rolls[0].PinsKnockedDown + roll.PinsKnockedDown > 10)
         {
             throw new ArgumentOutOfRangeException(
-                nameof(pinsKnockedDown), "The second roll cannot make total pins knocked down be greater than ten.");
+                nameof(roll), "The second roll cannot make total pins knocked down be greater than ten.");
         }
 
-        if (pinsKnockedDown is < 0 or > 10)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(pinsKnockedDown), "The number of pins knocked down must be between 0 and 10 (inclusive).");
-        }
-
-        pinsKnockedDownPerRoll[rollsAdded] = pinsKnockedDown;
-        rollsAdded++;
+        rolls.Add(roll);
     }
 }
