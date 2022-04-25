@@ -16,6 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6D0CA1C9-5118-4956-9D69-EEACB072E8F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A25B77D6-9DE7-4C59-9FE2-6327359DBC40}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,9 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {506A7ECE-5D3D-4058-87CE-2125EC4E1AFF}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8444DC6-0B9D-4E7D-BDED-AC0F19091BC9} = {6D0CA1C9-5118-4956-9D69-EEACB072E8F3}
+		{6C121207-44A9-478F-8B83-EBC1D82C4882} = {A25B77D6-9DE7-4C59-9FE2-6327359DBC40}
 	EndGlobalSection
 EndGlobal
