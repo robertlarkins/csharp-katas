@@ -34,6 +34,24 @@ public class PermutationsTests
     }
 
     [Fact]
+    public void A_single_item_only_has_one_permutation()
+    {
+        // Arrange
+        var sut = new PermutationIterator<int>(new[] { 1 }, true);
+
+        var expected = new List<int[]>
+        {
+            new[] { 1 }
+        };
+
+        // Act
+        var result = sut.ToList();
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
     public void All_permutations_are_generated_when_all_elements_are_the_same()
     {
         var sut = new PermutationIterator<int>(new[] { 5, 5, 5 }, true);

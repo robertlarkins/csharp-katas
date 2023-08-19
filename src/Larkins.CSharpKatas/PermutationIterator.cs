@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using Larkins.CSharpKatas.Extensions;
 
 namespace Larkins.CSharpKatas;
 
@@ -16,8 +17,6 @@ public class PermutationIterator<T> : IEnumerable<ReadOnlyCollection<T>>
 {
     private readonly bool isNewArrayGenerated;
     private readonly T[] currentArray;
-    private readonly int[] stackState;
-    private int i = 1;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PermutationIterator{T}"/> class.
@@ -30,7 +29,6 @@ public class PermutationIterator<T> : IEnumerable<ReadOnlyCollection<T>>
     public PermutationIterator(IEnumerable<T> array, bool isNewArrayGenerated)
     {
         currentArray = (T[])array.ToArray().Clone();
-        stackState = new int[currentArray.Length];
 
         this.isNewArrayGenerated = isNewArrayGenerated;
     }
@@ -46,26 +44,44 @@ public class PermutationIterator<T> : IEnumerable<ReadOnlyCollection<T>>
     /// <returns>The Enumerator for the permutations.</returns>
     public IEnumerator<ReadOnlyCollection<T>> GetEnumerator()
     {
-        yield return GetPermutation();
+        var totalElements = currentArray.Length;
+        var stackState = new int[totalElements];
 
-        while (i < currentArray.Length)
+        while (true)
         {
-            if (stackState[i] >= i)
-            {
-                stackState[i] = 0;
-                i++;
-                continue;
-            }
-
-            var isEven = i % 2 == 0;
-            var j = isEven ? 0 : stackState[i];
-
-            Swap(i, j);
-
             yield return GetPermutation();
 
-            stackState[i]++;
-            i = 1;
+            var index1 = CalculateIndex1();
+
+            if (index1 >= totalElements)
+            {
+                yield break;
+            }
+
+            var index2 = CalculateIndex2(index1);
+
+            currentArray.SwapElements(index1, index2);
+        }
+
+        int CalculateIndex1()
+        {
+            var index1 = 1;
+
+            while (index1 < totalElements && stackState[index1] >= index1)
+            {
+                stackState[index1] = 0;
+                index1++;
+            }
+
+            return index1;
+        }
+
+        int CalculateIndex2(int index1)
+        {
+            var index2 = index1.IsEven() ? 0 : stackState[index1];
+            stackState[index1]++;
+
+            return index2;
         }
     }
 
@@ -76,10 +92,5 @@ public class PermutationIterator<T> : IEnumerable<ReadOnlyCollection<T>>
         var a = isNewArrayGenerated ? (T[])currentArray.Clone() : currentArray;
 
         return Array.AsReadOnly(a);
-    }
-
-    private void Swap(int index1, int index2)
-    {
-        (currentArray[index1], currentArray[index2]) = (currentArray[index2], currentArray[index1]);
     }
 }
