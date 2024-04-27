@@ -1,4 +1,6 @@
-﻿namespace Larkins.CSharpKatas.Tests.Unit;
+﻿using Larkins.CSharpKatas.TennisGameKata;
+
+namespace Larkins.CSharpKatas.Tests.Unit;
 
 public class TennisGameTests
 {

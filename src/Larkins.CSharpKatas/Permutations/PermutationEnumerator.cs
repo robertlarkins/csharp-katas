@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 
-namespace Larkins.CSharpKatas;
+namespace Larkins.CSharpKatas.Permutations;
 
 /// <summary>
 /// Permutation Enumerator.

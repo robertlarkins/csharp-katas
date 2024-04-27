@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Larkins.CSharpKatas.Extensions;
 
-namespace Larkins.CSharpKatas;
+namespace Larkins.CSharpKatas.Permutations;
 
 /// <summary>
 /// Permutation iterator. This generates every permutation of the given array.
