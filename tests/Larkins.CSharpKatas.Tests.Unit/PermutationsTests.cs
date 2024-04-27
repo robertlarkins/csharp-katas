@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using Larkins.CSharpKatas.Permutations;
 
 namespace Larkins.CSharpKatas.Tests.Unit;
 
