@@ -65,10 +65,15 @@ public class BlobDetection
 
     private void AddNeighboursToQueue((int Y, int X) pixel)
     {
+        var ny = Math.Max(pixel.Y - 1, 0);
+        var lowerYLimit = Math.Min(pixel.Y + 1, height - 1);
+        var nx = Math.Max(pixel.X - 1, 0);
+        var rightXLimit = Math.Min(pixel.X + 1, width - 1);
+
         // add blob neighbours to queue that aren't already marked
-        for (int ny = Math.Max(pixel.Y - 1, 0); ny <= Math.Min(pixel.Y + 1, height - 1); ny++)
+        for (; ny <= lowerYLimit; ny++)
         {
-            for (int nx = Math.Max(pixel.X - 1, 0); nx <= Math.Min(pixel.X + 1, width - 1); nx++)
+            for (; nx <= rightXLimit; nx++)
             {
                 var isSamePixel = ny == pixel.Y && nx == pixel.X;
                 var isNonBlobPixel = image[ny, nx] == 0;
