@@ -44,12 +44,16 @@ public sealed class UniqueQueue<T> : IEnumerable<T>, ICollection
     /// Attempts to enqueue a object, returns false if the object was ever added to the queue in the past.
     /// </summary>
     /// <param name="item">The item to enqueue.</param>
-    public void Enqueue(T item)
+    /// <returns>True if enqueued, False otherwise.</returns>
+    public bool Enqueue(T item)
     {
         if (alreadyAdded.Add(item))
         {
             queue.Enqueue(item);
+            return true;
         }
+
+        return false;
     }
 
     public T Dequeue() => queue.Dequeue();
