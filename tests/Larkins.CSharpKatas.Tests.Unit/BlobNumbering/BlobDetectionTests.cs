@@ -44,20 +44,18 @@ public class BlobDetectionTests
         // Arrange
         var stringImage = new[]
         {
-            "00000",
-            "01110",
-            "01110",
-            "01110",
-            "00000"
+            "0000",
+            "0110",
+            "0110",
+            "0000"
         };
 
         var expectedStringImage = new[]
         {
-            "00000",
-            "01110",
-            "01110",
-            "01110",
-            "00000"
+            "0000",
+            "0110",
+            "0110",
+            "0000"
         };
 
         var image = StringImageToRectangularIntArray(stringImage);
@@ -126,6 +124,36 @@ public class BlobDetectionTests
             "0002010",
             "3300010",
             "0330110"
+        };
+
+        var image = StringImageToRectangularIntArray(stringImage);
+        var expected = StringImageToRectangularIntArray(expectedStringImage);
+
+        var sut = new BlobDetection(image);
+
+        // Act
+        var result = sut.GetBlobMap();
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public void SimpleImageWithConcavityIsIdentifiedAsSingleBlob()
+    {
+        // Arrange
+        var stringImage = new[]
+        {
+            "10101",
+            "10001",
+            "01110"
+        };
+
+        var expectedStringImage = new[]
+        {
+            "10201",
+            "10001",
+            "01110"
         };
 
         var image = StringImageToRectangularIntArray(stringImage);

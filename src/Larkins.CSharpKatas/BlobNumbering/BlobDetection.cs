@@ -6,8 +6,8 @@ public class BlobDetection
     private readonly int width;
     private readonly int[,] blobImage;
     private readonly int[,] image;
-    private readonly UniqueQueue<(int Y, int X)> pixelQueue = new();
-    private int blobCount;
+    private readonly UniqueQueue<Pixel> pixelQueue = new();
+    private int blobNumber;
 
     public BlobDetection(int[,] image)
     {
@@ -19,11 +19,10 @@ public class BlobDetection
 
     public int[,] GetBlobMap()
     {
-        // var pixelCount = new int[height, width];
-
         // This specialised queue is used so that any give pixel
         // can only ever be added once, otherwise it is ignored.
         // this handles the neighbour selection dealing with the same pixel multiple times.
+        // Alternatively, we could create a third image that indicates if a pixel has already been enqueued.
         GoThroughEveryPixel();
 
         return blobImage;
@@ -35,14 +34,16 @@ public class BlobDetection
         {
             for (int x = 0; x < width; x++)
             {
-                if (image[y, x] == 0 || blobImage[y, x] != 0)
+                var pixel = new Pixel(y, x);
+
+                if (!IsUnlabelledPixel(pixel))
                 {
                     continue;
                 }
 
-                blobCount++;
+                blobNumber++;
 
-                pixelQueue.Enqueue((y, x));
+                pixelQueue.Enqueue(pixel);
 
                 FindAllPixelsInBlob();
             }
@@ -51,41 +52,47 @@ public class BlobDetection
 
     private void FindAllPixelsInBlob()
     {
-        while (pixelQueue.Any())
+        while (pixelQueue.Count != 0)
         {
             var pixel = pixelQueue.Dequeue();
 
-            // mark the pixel with identifier
-            blobImage[pixel.Y, pixel.X] = blobCount;
+            blobImage[pixel.Y, pixel.X] = blobNumber;
 
-            // pixelCount[pixel.y, pixel.x]++;
-            AddNeighboursToQueue(pixel);
+            AddUnlabelledNeighboursToQueue(pixel);
         }
     }
 
-    private void AddNeighboursToQueue((int Y, int X) pixel)
+    private void AddUnlabelledNeighboursToQueue(Pixel pixel)
     {
-        var ny = Math.Max(pixel.Y - 1, 0);
         var lowerYLimit = Math.Min(pixel.Y + 1, height - 1);
-        var nx = Math.Max(pixel.X - 1, 0);
         var rightXLimit = Math.Min(pixel.X + 1, width - 1);
 
-        // add blob neighbours to queue that aren't already marked
-        for (; ny <= lowerYLimit; ny++)
+        for (var ny = Math.Max(pixel.Y - 1, 0); ny <= lowerYLimit; ny++)
         {
-            for (; nx <= rightXLimit; nx++)
+            for (var nx = Math.Max(pixel.X - 1, 0); nx <= rightXLimit; nx++)
             {
-                var isSamePixel = ny == pixel.Y && nx == pixel.X;
-                var isNonBlobPixel = image[ny, nx] == 0;
-                var isAlreadyLabelledPixel = blobImage[ny, nx] != 0;
+                var neighbouringPixel = new Pixel(ny, nx);
 
-                if (isSamePixel || isNonBlobPixel || isAlreadyLabelledPixel)
+                if (CanNeighbourBeAdded(pixel, neighbouringPixel))
                 {
-                    continue;
+                    pixelQueue.Enqueue(neighbouringPixel);
                 }
-
-                pixelQueue.Enqueue((ny, nx));
             }
         }
+    }
+
+    private bool CanNeighbourBeAdded(Pixel pixel, Pixel neighbourPixel)
+    {
+        var isDifferentPixel = neighbourPixel != pixel;
+
+        return isDifferentPixel && IsUnlabelledPixel(neighbourPixel);
+    }
+
+    private bool IsUnlabelledPixel(Pixel pixel)
+    {
+        var isBlobPixel = image[pixel.Y, pixel.X] == 1;
+        var isUnlabelledPixel = blobImage[pixel.Y, pixel.X] == 0;
+
+        return isBlobPixel && isUnlabelledPixel;
     }
 }
