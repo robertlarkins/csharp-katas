@@ -1,11 +1,11 @@
-using System.Collections.Generic;
+using Larkins.CSharpKatas.ResultType;
 
 namespace Larkins.CSharpKatas.TenPinBowling.ValueObjects;
 
 /// <summary>
 /// Represents a roll where 0 to 10 pins have been knocked down.
 /// </summary>
-public class Roll : ValueObject
+public record Roll
 {
     private Roll(int pinsKnockedDown)
     {
@@ -31,14 +31,5 @@ public class Roll : ValueObject
         }
 
         return new Roll(pinsKnockedDown);
-    }
-
-    /// <summary>
-    /// Used to determine equality between Rolls.
-    /// </summary>
-    /// <returns>The components used to determine equality between rolls.</returns>
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return PinsKnockedDown;
     }
 }
